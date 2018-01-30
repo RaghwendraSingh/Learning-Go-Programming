@@ -29,6 +29,13 @@ var metalloids = []metalloid{
 	metalloid{"Polonium", 84, 209.0},
 }
 
+func (m metalloid) String() string {
+	return fmt.Sprintf(
+		"%-10s %-10d %-10.3f %e",
+		m.name, m.number, m.weight.float(), atoms(moles(m.weight)),
+	)
+}
+
 // find number of moles
 func moles(mass amu) float64 {
 
@@ -52,9 +59,6 @@ func main() {
 	fmt.Println(headers())
 
 	for _, m := range metalloids {
-		fmt.Printf(
-			"%-10s %-10d %-10.3f %e\n",
-			m.name, m.number, m.weight.float(), atoms(moles(m.weight)),
-		)
+		fmt.Println(m)
 	}
 }
