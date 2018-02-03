@@ -4,14 +4,14 @@ import (
 	"fmt"
 )
 
-var name, desc string
+var Name, desc string
 var radius int32
 var mass float64
 var active bool
 var satellites []string
 
-func main() {
-	name = "Sun"
+func main1() {
+	Name = "Sun"
 	desc = "Star"
 	radius = 685800
 	mass = 1.989E+30
@@ -26,7 +26,7 @@ func main() {
 		"Uranus",
 		"Neptune",
 	}
-	fmt.Println(name)
+	fmt.Println(Name)
 	fmt.Println(desc)
 	fmt.Println("Radis (km), ", radius)
 	fmt.Println("Mass (kg), ", mass)
