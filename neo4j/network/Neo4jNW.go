@@ -71,22 +71,3 @@ func main1() {
 	fmt.Println(GetHierarchyUuid("Food"))
 }
 
-func main0() {
-	resp, err := http.Get("http://localhost:8080/nw/search/findByArea/?area=Food")
-	if err != nil {
-		fmt.Println("error")
-	}
-	defer resp.Body.Close()
-	body, err2 := ioutil.ReadAll(resp.Body)
-	if err2 != nil {
-		fmt.Println("error @")
-	}
-
-	respN := NetworkResponse{}
-
-	json.Unmarshal(body, &respN)
-
-	for _, network := range respN.Embedded.Networks {
-		fmt.Println(network.Uuid, "~", network.Name, "~", network.Area)
-	}
-}
