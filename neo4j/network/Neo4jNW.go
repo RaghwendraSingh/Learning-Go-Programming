@@ -6,34 +6,18 @@ import "io/ioutil"
 import "encoding/json"
 import "errors"
 
-type NetworkResponse struct {
-	Embedded struct {
-		Networks []struct {
-			Uuid  string `json:"uuid"`
-			Name  string `json:"name"`
-			Area  string `json:"area"`
-			Links struct {
-				Self struct {
-					Href string `json:"href"`
-				} `json:"self"`
-				Network struct {
-					Href string `json:"href"`
-				} `json:"network"`
-			} `json:"_links"`
-		} `json:"networks"`
-	} `json:"_embedded"`
-	Links struct {
-		Self struct {
-			Href string `json:"href"`
-		} `json:"self"`
-	} `json:"_links"`
+type Network struct {
+	UUID string `json:"uuid"`
+	Name string `json:"name"`
+	Area string `json:"area"`
 }
 
 func GetHierarchyUuid(itemType string) (string, error) {
+	fmt.Println("Inside GetHierarchyUuid function --------------------------->")
 	protocol := "http"
-	host := "localhost"
+	host := "192.168.2.5"
 	port := 8080
-	path := "/nw/search/findByArea/"
+	path := "/mlm/"
 	param := "area"
 
 	url := fmt.Sprintf("%s://%s:%d%s?%s=%s",
@@ -44,9 +28,10 @@ func GetHierarchyUuid(itemType string) (string, error) {
 		param,
 		itemType,
 	)
+	fmt.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
-		return "", errors.New("Failed to get data from URL")
+		return "", errors.New("Failed to get data from URL ~" + url)
 	}
 	defer resp.Body.Close()
 	body, err2 := ioutil.ReadAll(resp.Body)
@@ -54,20 +39,19 @@ func GetHierarchyUuid(itemType string) (string, error) {
 		return "", errors.New("Failed to read body from the response")
 	}
 
-	networkResp := NetworkResponse{}
+	networkResp := []Network{}
 
 	json.Unmarshal(body, &networkResp)
 
-	if len(networkResp.Embedded.Networks) == 0 {
+	if len(networkResp) == 0 {
 		return "", errors.New("No network with the specified area")
 	}
 	// returning the first network uuid
 
-	return networkResp.Embedded.Networks[0].Uuid, nil
+	return networkResp[0].UUID, nil
 
 }
 
 func main1() {
 	fmt.Println(GetHierarchyUuid("Food"))
 }
-
